@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private int mServerPort = 2222;
     private int mClientPort = 2222;
 
+    private Boolean mServerOn = true;
+
     final Handler mUIThreadHandler = new Handler();
 
 
@@ -434,11 +436,6 @@ public class MainActivity extends AppCompatActivity {
             mPeerConnection.close();
             mPeerConnection = null;
         }
-
-        if (null != mPeerConnectionFactory) {
-            //mPeerConnectionFactory.dispose();
-            //mPeerConnectionFactory = null;
-        }
     }
 
     private void setRemoteDescription(final SessionDescription aDescription) {
@@ -490,6 +487,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void callStart(){
         Log.e(LOG_TAG, "## callStart(): -> createOffer");
+        if (mCallState != 0) {
+            destroyConnect();
+            createLocalStream();
+            createConnect();
+        }
+        mCallState = 1;
 
         MediaConstraints constraints = new MediaConstraints();
         //constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
@@ -813,7 +816,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void callServerStart(){
         Log.e(LOG_TAG, "callServerStart");
-        final Boolean serverOn = true;
 
         new Thread(new Runnable() {
             @Override
@@ -825,7 +827,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                while(serverOn){
+                while(mServerOn){
 
                     Socket s = new Socket();
                     try {
@@ -912,8 +914,32 @@ public class MainActivity extends AppCompatActivity {
         Log.e(LOG_TAG, "## hangup(): reason=" + reason);
     }
 
-    private boolean isIncoming() {
-        return mIsIncoming;
+    private void terminate() {
+        mServerOn = false;
+
+        destroyConnect();
+
+        if (null != mPeerConnectionFactory) {
+            mPeerConnectionFactory.dispose();
+            mPeerConnectionFactory = null;
+        }
+
+        if (null != mVideoSource) {
+            mVideoSource.dispose();
+            mVideoSource = null;
+        }
+
+        if (null != mAudioSource) {
+            mAudioSource.dispose();
+            mAudioSource = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        terminate();
     }
 
 }
