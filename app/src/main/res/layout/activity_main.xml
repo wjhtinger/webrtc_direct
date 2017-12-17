@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.windsing.webrtc.webrtc_direct.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/call_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/call_menu_buttons_layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white">
+
+
+            <EditText
+                android:id="@+id/server_ip"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:text="192.168.1.4"/>
+            <Button
+                android:id="@+id/switch_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="切换摄像头"/>
+
+            <Button
+                android:id="@+id/connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="连接"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>
