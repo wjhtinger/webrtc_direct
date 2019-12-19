@@ -27,12 +27,24 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/white">
 
-
-            <EditText
-                android:id="@+id/server_ip"
-                android:layout_width="140dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="192.168.1.4"/>
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/server_ip"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:text="192.168.137.162" />
+
+                <TextView
+                    android:id="@+id/locale_ip"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:text="127.0.0.1" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/switch_camera"
                 android:layout_width="wrap_content"

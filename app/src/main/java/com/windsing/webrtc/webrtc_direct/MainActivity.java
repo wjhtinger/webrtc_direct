@@ -11,8 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,9 +39,14 @@ import org.webrtc.VideoTrack;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "LoginActivity";
@@ -108,6 +116,20 @@ public class MainActivity extends AppCompatActivity {
                 sendSwitchCamera();
             }
         });
+
+        EditText editText = (EditText)findViewById(R.id.server_ip);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                serverIP = textView.getText().toString();
+                return false;
+            }
+        });
+        serverIP = editText.getText().toString();
+
+        TextView textView = (TextView)findViewById(R.id.locale_ip);
+        textView.setText(getIpAddressString());
+
 
         initCall();
     }
@@ -941,5 +963,25 @@ public class MainActivity extends AppCompatActivity {
 
         terminate();
     }
+
+    public String getIpAddressString() {
+        try {
+            for (Enumeration<NetworkInterface> enNetI = NetworkInterface
+                    .getNetworkInterfaces(); enNetI.hasMoreElements(); ) {
+                NetworkInterface netI = enNetI.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = netI
+                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (inetAddress instanceof Inet4Address && !inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return "0.0.0.0";
+    }
+
 
 }
